@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Menu from './Menu';
 
-function App() {
+const App = () => {
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [items, setItems] = useState([
+    "😀 Smile",
+    "🙁 Frown",
+    "😇 Angel",
+    "😈 Devil",
+  ])
+
+  const handleDragStart = (e, i) => {
+    setSelectedItem(items[i])
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", e.target);
+    e.dataTransfer.setDragImage(e.target, 20, 20);
+  }
+
+  const handleDragOver = (i) => {
+    const draggedOver = items[i];
+
+    if (draggedOver === selectedItem) return;
+
+    let newItems = items.filter(item => item !== selectedItem);
+    newItems.splice(i, 0, selectedItem);
+
+    setItems(newItems);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      { items.map( (item, i) => (
+        <div
+          key={i}
+          className="item"
+          draggable
+          onDragStart={(e) => handleDragStart(e, i)}
+          onDragOver={() => handleDragOver(i)}
+          onDragEnd={() => setSelectedItem(null)}
         >
-          Learn React
-        </a>
-      </header>
+          <Menu />
+          <span>{item}</span>
+        </div>
+      ))}
     </div>
   );
-}
+};
+
 
 export default App;
