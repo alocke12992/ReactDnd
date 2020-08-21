@@ -18,6 +18,12 @@ svg {
   margin-right: 20px
 }
 
+.list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .item {
   list-style-type: none;
   display: flex;

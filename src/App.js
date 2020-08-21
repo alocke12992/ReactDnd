@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 const ReactDnd = ({ items }) => {
-  console.log(items)
   const [selectedItem, setSelectedItem] = useState(null)
-  const [itemList, setItemList] = useState([])
-
-  useEffect(() => {
-    setItemList(items);
-  }, [])
+  const [itemList, setItemList] = useState(items)
 
   const handleDragStart = (e, i) => {
     setSelectedItem(itemList[i])
@@ -17,31 +12,30 @@ const ReactDnd = ({ items }) => {
 
   const handleDragOver = (i) => {
     const draggedOver = itemList[i];
-
     if (draggedOver === selectedItem) return;
-
     let newItems = itemList.filter(item => item !== selectedItem);
     newItems.splice(i, 0, selectedItem);
-
     setItemList(newItems);
   }
-  if (itemList.length) {
-    return itemList.map((item, i) => (
-      <div
-        key={i}
-        className="item-container"
-        draggable
-        onDragStart={(e) => handleDragStart(e, i)}
-        onDragOver={() => handleDragOver(i)}
-        onDragEnd={() => setSelectedItem(null)}
-      >
-        <div className="item">
-          {item}
+
+  return (
+    <div className="list-container">
+      {itemList.map((item, i) => (
+        <div
+          key={i}
+          className="item-container"
+          draggable
+          onDragStart={(e) => handleDragStart(e, i)}
+          onDragOver={() => handleDragOver(i)}
+          onDragEnd={() => setSelectedItem(null)}
+        >
+          <div className="item">
+            {item}
+          </div>
         </div>
-      </div>
-    ))
-  }
-  return null
+      ))}
+    </div>
+  );
 };
 
 const items = [
